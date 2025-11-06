@@ -11,6 +11,10 @@ class QLearn:
         self.gamma = gamma      # discount factor
         self.actions = actions
 
+    """
+    @brief loads the Q state-action values from a pickle file.
+    @param filename The name of the file (without extension) to load
+    """
     def loadQ(self, filename):
         '''
         Load the Q state-action values from a pickle file.
@@ -27,6 +31,10 @@ class QLearn:
 
         print("Loaded file: {}".format(filename+".pickle"))
 
+    """
+    @brief saves the Q state-action values in a pickle file.
+    @param filename The name of the file to save
+    """
     def saveQ(self, filename):
         '''
         Save the Q state-action values in a pickle file.
@@ -44,6 +52,7 @@ class QLearn:
 
         print("Wrote to file: {}".format(filename+".pickle"))
 
+   
     def getQ(self, state, action):
         '''
         @brief returns the state, action Q value or 0.0 if the value is 
@@ -55,6 +64,9 @@ class QLearn:
         '''
         @brief returns a random action epsilon % of the time or the action 
             associated with the largest Q value in (1-epsilon)% of the time
+        @param state The current state
+        @param return_q If True return action and q instead of just action
+        @retval action or (action, q)
         '''
         # TODO: Implement exploration vs exploitation
         #    if we need to take a random action:
@@ -92,6 +104,10 @@ class QLearn:
         '''
         @brief updates the Q(state,value) dictionary using the bellman update
             equation
+        @param state1 The current state
+        @param action1 The action taken
+        @param reward The reward received after taking action1 in state1
+        @param state2 The next state after taking action1
         '''
         # TODO: Implement the Bellman update function:
         #     Q(s1, a1) += alpha * [reward(s1,a1) + gamma* max(Q(s2)) - Q(s1,a1)]
@@ -108,8 +124,10 @@ class QLearn:
         # THE NEXT LINES NEED TO BE MODIFIED TO MATCH THE REQUIREMENTS ABOVE
 
         current_q = self.getQ(state1, action1)
+
         future_q_values = [self.getQ(state2, a) for a in self.actions]
         max_future_q = max(future_q_values) if future_q_values else 0.0
+        
         self.q[(state1, action1)] = current_q + self.alpha * (reward + self.gamma * max_future_q - current_q)
 
       
